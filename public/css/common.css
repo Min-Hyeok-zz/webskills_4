@@ -1,0 +1,141 @@
+*{
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	text-decoration: none;
+	outline: none;
+	color: inherit;
+	box-sizing: border-box;
+}
+	html,body{
+		overflow-x: hidden;
+	}
+	.bg{
+		position: absolute;
+		z-index: -9999;
+		width: 100%;
+		height: 100%;
+		background: url(../img/pantech.jpg) center / cover;
+		background-position: left top -120px;
+		background-repeat: no-repeat;
+		opacity: .6;
+	}
+		.pn{
+			width: 25px;
+			height: 25px;
+			display: block;
+			background: #000;
+			color: #fff;
+			line-height: 25px;
+			font-size: 14px;
+			margin: 0 5px;
+		}
+			.pageing{
+				max-width: 1200px;
+				width: 100%;
+				display: flex;
+				margin: 0 auto;
+				justify-content: space-around;
+				text-align: center;
+				margin-top: 50px;
+			}
+			.img{
+				width: 100%;
+				height: 200px;
+			}
+
+	/* header */
+
+header{
+	height: 50px;
+	background: #000;
+	color: #fff;
+	overflow: hidden;
+}
+nav{
+	max-width: 1000px;
+	width: 100%;
+	height: 100%;
+	margin: 0 auto;
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+}
+	nav > ul{
+		display: flex;
+	}
+		nav > ul > li > a{
+			transition: .3s;
+			padding: 20px;
+		}
+		nav > ul > li > a:hover{
+			background: #fff;
+			color: #000;
+		}
+.logo{
+	cursor: pointer;
+}
+
+	/* main */
+
+table{
+	max-width: 1200px;
+	width: 100%;
+	margin: 0 auto;
+	margin-top: 100px;
+	text-align: center;
+	position: relative;
+}
+.button{
+	display: block;
+	width: 100px;
+	height: 35px;
+	text-align: center;
+	line-height: 35px;
+	background: #000;
+	color: #fff;
+	margin: 0 auto;
+}
+
+	/* footer */
+
+footer{
+	width: 100%;
+	height: 30px;
+	background: #000;
+	color: #fff;
+	text-align: center;
+	line-height: 30px;
+	position: absolute;
+	bottom: 0;
+}
+
+	/* form */
+
+#form{
+	max-width: 600px;
+	width: 100%;
+	margin: 0 auto;
+	margin-top: 20px;
+}
+	#form > p{
+		font-size: 18px;
+		text-align: center;
+	}
+	
+#form > input{
+	width: 100%;
+	height: 40px;
+	margin: 10px 0;
+	padding: 0 10px;
+}
+	#form > input[type=submit]{
+		border: none;
+		background: #000;
+		color: #fff;
+		cursor: pointer;
+	}
+textarea{
+	padding: 10px;
+	width: 100%;
+}
