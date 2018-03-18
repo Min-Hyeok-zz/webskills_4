@@ -22,8 +22,6 @@
 		}
 
 		function boardAction(){
-			$add_sql = $cancel = "";
-			$table = 'board';
 			if (isset($_POST['action'])) {
 				loginChk();
 				$_POST = array_map("htmlspecialchars", $_POST);
@@ -36,6 +34,15 @@
 						access($name != $_SESSION['member']['name'],"작성자를 변경하지 마세요.");
 						$cat = ['영화','스포츠','게임','IT'];
 						access(!in_array($category, $cat),"카테고리를 변경하지 마세요");
+						$sql = "insert into board set ";
+						// $sql .= "name='{$name}'";
+						// $sql .= ",subject='{$subject}'";
+						// $sql .= ",category='{$category}'";
+						// $sql .= ",content='{$content}'";
+						$sql .= "name=?";
+						$sql .= ",subject=?";
+						$sql .= ",category=?";
+						$sql .= ",content=?";
 						if($_FILES['img']['type'] != ""){
 							$type = $_FILES['img']['type'];
 							$arr = ['image/jpg','image/jpeg','image/png','image/gif'];
@@ -44,13 +51,19 @@
 							$imgName = $_FILES['img']['name'];
 							$target = $upload.$imgName;
 							if(move_uploaded_file($_FILES['img']['tmp_name'], $target) ) {
-								$add_sql .= ",img='{$imgName}'";
+								$sql .= ",img='{$imgName}'";
 							}
 						}
-						$add_sql .= ",date=now();";
+						$sql .= ",date=now();";
+						//$res = $this->db->prepare($sql)->execute([$name,$subject,$category,$content]);
+						//access($res,$msg,$url);
+						access($this->query($sql),$msg,$url);
 					break;
 					case 'update':
 						access(trim($subject) == "" || trim($content == ""),"빈 값이 있습니다.");
+						$sql = "update board set ";
+						$sql .= "subject='{$subject}'";
+						$sql .= ",content='{$content}'";
 						if($_FILES['img']['type'] != ""){
 							$type = $_FILES['img']['type'];
 							$arr = ['image/jpg','image/jpeg','image/png','image/gif'];
@@ -59,29 +72,28 @@
 							$imgName = $_FILES['img']['name'];
 							$target = $upload.$imgName;
 							if(move_uploaded_file($_FILES['img']['tmp_name'], $target) ) {
-								$add_sql .= ",img='{$imgName}'";
+								$sql .= ",img='{$imgName}'";
 							}
 						}
-						$add_sql .= " where idx='{$this->param->idx}'";
+						$sql .= " where idx='{$this->param->idx}'";
+						access($this->query($sql),$msg,$url);
 					break;
 					case 'delete':
-						$add_sql = " where idx='{$this->param->idx}'";
+						access($this->query("delete from board where idx='{$this->param->idx}'"),$msg,$url);
 					break;
 					case 'reply_insert':
 						access($_SESSION['member']['name'] != $name,"작성자를 임의로 변경하지 마세요.");
-						$table = 'reply';
-						$add_sql .= ", bidx='{$this->param->idx}'";
-						$_POST['action'] = 'insert';
+						$sql = "insert into reply set ";
+						$sql .= "bidx='{$this->param->idx}'";
+						$sql .= ",name='{$name}'";
+						$sql .= ",content='{$content}'";
+						$sql .= ",date=now();";
+						access($this->query($sql),$msg,$url);
 					break;
 					case 'reply_delete':
-						$add_sql = " where idx='{$idx}'";
-						$_POST['action'] = 'delete';
-						break;
+						access($this->query("delete from reply where idx='{$idx}'"),$msg,$url);
+					break;
 				}
-				$cancel .= "idx/action/table";
-				$column = $this->getColumn($_POST,$cancel).$add_sql;
-				$res = $this->setQuery($table,$_POST['action'],$column);
-				access($res,$msg,$url);
 			}
 		}
 

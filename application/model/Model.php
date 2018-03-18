@@ -1,6 +1,8 @@
 <?php
 	Class Model{
 
+		var $sql;
+
 		function __construct($param){
 			$this->param = $param;
 			try {
@@ -13,20 +15,58 @@
 		}
 
 		//쿼리문 함수 설정
-		function query($sql){
-			return $this->db->query($sql);
+		function query($sql = false){
+			if($sql) $this->sql = $sql;
+			$res = $this->db->query($this->sql);
+			if(!$res){
+				echo "<pre>";
+				echo $this->sql;
+				print_r($this->db->errorInfo());
+				echo "</pre>";
+				exit;
+			}
+			return $res;
 		}
 
-		function fetch($sql){
-			return $this->db->query($sql)->fetch();
+		function fetch($sql = false){
+			if($sql) $this->sql = $sql;
+			return $this->query()->fetch();
 		}
 
-		function fetchAll($sql){
-			return $this->db->query($sql)->fetchAll();
+		function fetchAll($sql = false){
+			if($sql) $this->sql = $sql;
+			return $this->query()->fetchAll();
 		}
 
-		function cnt($sql){
-			return $this->db->query($sql)->rowCount();
+		function cnt($sql = false){
+			return $this->query()->rowCount();
+		}
+
+		function getColumn($arr, $cancel){
+			$column = '';
+			$cancel = explode("/",$cancel);
+			foreach($arr as $key=>$val){
+				if(in_array($key,$cancel)) continue;
+				$column .= ", {$key}='{$val}'";
+			}
+			return substr($column,2);
+		}
+
+		function setQuery($table, $action, $column){
+			switch($action){
+				case 'insert' :
+					$sql = "INSERT INTO {$table} SET ";
+				break;
+				case 'update' :
+					$sql = "UPDATE {$table} SET ";
+				break;
+				case 'delete' :
+					$sql = "DELETE FROM {$table} ";
+				break;
+			}
+			$sql .= $column;
+			$this->sql = $sql;
+			return $this->query();
 		}
 
 	}
