@@ -23,3 +23,5 @@
 
 	require_once(_CONFIG."config.php");
 	new Application();
+
+	// 태스트 주석
